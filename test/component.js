@@ -258,6 +258,14 @@
       });
     });
 
+    it('updates selection type state', function() {
+      return updateCyProps({
+        selectionType: 'additive'
+      }).then(() => {
+        expect(cy.selectionType()).to.equal('additive');
+      });
+    });
+
     it('updates autoungrabify state', function() {
       return updateCyProps({
         autoungrabify: true

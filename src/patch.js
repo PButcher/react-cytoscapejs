@@ -44,6 +44,7 @@ export const patch = (cy, json1, json2, diff, toJson, get, forEach) => {
       'panningEnabled',
       'userPanningEnabled',
       'boxSelectionEnabled',
+      'selectionType',
       'autoungrabify',
       'autolock',
       'autounselectify'

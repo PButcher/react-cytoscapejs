@@ -157,6 +157,13 @@ export const types = {
   boxSelectionEnabled: bool,
 
   /**
+   * Whether single or additive (ctrl+click) element selection is enabled.
+   *
+   * See http://js.cytoscape.org/#init-opts/selectionType
+   */
+  selectionType: string,
+
+  /**
    * If true, nodes automatically can not be grabbed regardless of whether
    * each node is marked as grabbable.
    *

@@ -20,8 +20,7 @@ yarn add react-cytoscapejs
 yarn add cytoscape@3.x.y # your desired version, 3.2.19 or newer
 ```
 
-Note that you must specify the desired version of `cytoscape` to be used.  Otherwise, you will get whatever version npm or yarn thinks best matches this package's compatible semver range -- which is currently `^3.2.19` or any version of 3 newer than or equal to 3.2.19.
-
+Note that you must specify the desired version of `cytoscape` to be used. Otherwise, you will get whatever version npm or yarn thinks best matches this package's compatible semver range -- which is currently `^3.2.19` or any version of 3 newer than or equal to 3.2.19.
 
 The component is created by putting a `<CytoscapeComponent>` within the `render()` function of one of your apps's React components. Here is a minimal example:
 
@@ -31,22 +30,33 @@ import ReactDOM from 'react-dom';
 import CytoscapeComponent from 'react-cytoscapejs';
 
 class MyApp extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
-  render(){
+  render() {
     const elements = [
-       { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
-       { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } },
-       { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }
+      { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
+      { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } },
+      {
+        data: {
+          source: 'one',
+          target: 'two',
+          label: 'Edge from Node1 to Node2'
+        }
+      }
     ];
 
-    return <CytoscapeComponent elements={elements} style={ { width: '600px', height: '600px' } } />;
+    return (
+      <CytoscapeComponent
+        elements={elements}
+        style={{ width: '600px', height: '600px' }}
+      />
+    );
   }
 }
 
-ReactDOM.render( React.createElement(MyApp, document.getElementById('root')));
+ReactDOM.render(React.createElement(MyApp, document.getElementById('root')));
 ```
 
 ## `Basic props`
@@ -69,7 +79,7 @@ The flat list of [Cytoscape elements](http://js.cytoscape.org/#notation/elements
 
 N.b. arrays or objects should not be used in an `element`'s `data` or `scratch` fields, unless using a custom `diff()` prop.
 
-In order to make it easier to support passing in `elements` JSON in the `elements: { nodes: [], edges: [] }` format, there is a static function `CytoscapeComponent.normalizeElements()`.  E.g.:
+In order to make it easier to support passing in `elements` JSON in the `elements: { nodes: [], edges: [] }` format, there is a static function `CytoscapeComponent.normalizeElements()`. E.g.:
 
 ```jsx
 <CytoscapeComponent
@@ -80,14 +90,18 @@ In order to make it easier to support passing in `elements` JSON in the `element
     ],
     edges: [
       {
-        data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' }
+        data: {
+          source: 'one',
+          target: 'two',
+          label: 'Edge from Node1 to Node2'
+        }
       }
     ]
   })}
 />
 ```
 
-Note that `CytoscapeComponent.normalizeElements()` is useful only for plain-JSON data, such as an export from Cytoscape.js or the Cytoscape desktop software.  If you use [custom prop types](#custom-prop-types), such as Immutable, then you should flatten the elements yourself before passing the `elements` prop.
+Note that `CytoscapeComponent.normalizeElements()` is useful only for plain-JSON data, such as an export from Cytoscape.js or the Cytoscape desktop software. If you use [custom prop types](#custom-prop-types), such as Immutable, then you should flatten the elements yourself before passing the `elements` prop.
 
 ### `stylesheet`
 
@@ -139,7 +153,13 @@ class MyApp extends React.Component {
     const elements = [
       { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
       { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } },
-      { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }
+      {
+        data: {
+          source: 'one',
+          target: 'two',
+          label: 'Edge from Node1 to Node2'
+        }
+      }
     ];
 
     const layout = { name: 'cose-bilkent' };
@@ -201,6 +221,10 @@ Whether the [zoom level of the graph is mutable by user gestures](http://js.cyto
 
 Whether [shift+click-and-drag box selection is enabled](http://js.cytoscape.org/#init-opts/boxSelectionEnabled), e.g. `<CytoscapeComponent boxSelectionEnabled={false} />`.
 
+### `selectionType`
+
+Whether [`single` or `additive` (ctrl+click) element selection is enabled](http://js.cytoscape.org/#init-opts/selectionType), e.g. `<CytoscapeComponent selectionType="additive" />`.
+
 ### `autoungrabify`
 
 If true, nodes [automatically can not be grabbed](http://js.cytoscape.org/#init-opts/autoungrabify) regardless of whether each node is marked as grabbable, e.g. `<CytoscapeComponent autoungrabify={true} />`.
@@ -253,7 +277,7 @@ const get = (object, key) => {
   } else {
     return object[key];
   }
-}
+};
 ```
 
 The default is:
@@ -267,20 +291,20 @@ const get = (object, key) => object[key];
 Get the deep value of the specified `object` as non-stringified JSON. E.g.:
 
 ```js
-const toJson = (object) => {
+const toJson = object => {
   // must check type because some props may be immutable and others may not be
   if (Immutable.isImmutable(object)) {
     return object.toJSON();
   } else {
     return object;
   }
-}
+};
 ```
 
 The default is:
 
 ```js
-const toJson = (object) => object;
+const toJson = object => object;
 ```
 
 ### `diff(objectA, objectB)`
@@ -312,7 +336,11 @@ The above example is the same as the default `forEach()`.
 The `cy` prop allows for getting a reference to the `cy` Cytoscape object, e.g.:
 
 ```jsx
-<CytoscapeComponent cy={(cy) => { myCyRef = cy }} />
+<CytoscapeComponent
+  cy={cy => {
+    myCyRef = cy;
+  }}
+/>
 ```
 
 ## Change log
@@ -330,5 +358,5 @@ The `cy` prop allows for getting a reference to the `cy` Cytoscape object, e.g.:
   - Update style attribute in docs example to use idiomatic React style object
   - Add npmignore
 - v1.0.0
+
   - Initial release
-  
